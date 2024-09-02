@@ -1,4 +1,3 @@
-import "./App.css";
 import CurrencyConvertor from "./currencyConvertor";
 
 function App() {
