@@ -1,8 +1,14 @@
+import { useState } from "react";
+import { DropdownButton } from "react-bootstrap";
 import Dropdown from "react-bootstrap/Dropdown";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 
 const CurrencyConvertor = () => {
+  const currenciesName = ["USD", "INR", "AUD", "CAD", "EUR", "GBP", "JPY"];
+
+  const [selectSourceCurrency, setSelectedSourceCurrency] = useState("");
+
   return (
     <>
       <h1 className="text-center">Currency Convertor</h1>
@@ -18,18 +24,18 @@ const CurrencyConvertor = () => {
         </InputGroup>
         <h3 style={{ margin: "0 10px" }}>From</h3>
         <Dropdown>
-          <Dropdown.Toggle variant="success" id="dropdown-basic">
-            Currency
-          </Dropdown.Toggle>
-          <Dropdown.Menu>
-            <Dropdown.Item href="#/action-2">USD</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">INR</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">AUD</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">CAD</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">EUR</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">GBP</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">JPY</Dropdown.Item>
-          </Dropdown.Menu>
+          <DropdownButton title="currency">
+            <Dropdown.Menu>
+              {currenciesName.map((currency) => (
+                <Dropdown.Item
+                  key={currency}
+                  onClick={(event) => console.log(event)}
+                >
+                  {currency}
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </DropdownButton>
         </Dropdown>
         <h3 style={{ margin: "0 10px" }}>To</h3>
         <Dropdown>
@@ -37,19 +43,23 @@ const CurrencyConvertor = () => {
             Currency
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <Dropdown.Item href="#/action-2">USD</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">INR</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">AUD</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">CAD</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">EUR</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">GBP</Dropdown.Item>
-            <Dropdown.Item href="#/action-3">JPY</Dropdown.Item>
+            {currenciesName.map((currency) => (
+              <Dropdown.Item
+                key={currency}
+                onClick={() => setSelectedSourceCurrency(currency)}
+              >
+                {currency}
+              </Dropdown.Item>
+            ))}
           </Dropdown.Menu>
         </Dropdown>
         <InputGroup className="mb-3" style={{ margin: "0 10px" }}>
           <Form.Control placeholder="Converted Amount" />
         </InputGroup>
       </div>
+      <p className="fs-4 fw-bold text-center" style={{ margin: "50px" }}>
+        1 USD = 138.5802 JPY
+      </p>
     </>
   );
 };
