@@ -1,7 +1,11 @@
 import CurrencyConvertor from "./currencyConvertor";
 
 function App() {
-  return <CurrencyConvertor />;
+  return (
+    <>
+      <CurrencyConvertor />
+    </>
+  );
 }
 
 export default App;
