@@ -1,10 +1,17 @@
 import Form from "react-bootstrap/Form";
 
-const AmountInput = () => {
+interface Props {
+  amount: number;
+  onChange: (event: React.FormEvent<HTMLInputElement>) => void;
+}
+
+const AmountInput = ({ amount, onChange }: Props) => {
   return (
     <>
       <Form className="d-flex flex-coloumn">
         <input
+          value={amount}
+          onChange={onChange}
           className="form-control"
           type="number"
           placeholder="Enter Amount"

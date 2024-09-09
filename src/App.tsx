@@ -21,9 +21,13 @@ export interface Data {
 }
 
 function App() {
-  const [conversionValue, setConversionValue] = useState(1);
+  const [conversionValue, setConversionValue] = useState<number>(0);
   const [currencyOptions, setCurrencyOptions] = useState<string[]>([]);
-  //console.log(currencyOptions);
+  const [fromCurrency, setFromCurrency] = useState<string>("");
+  const [toCurrency, setToCurrency] = useState<string>("");
+  const [exchangeRate, setExchangeRate] = useState<number>(0);
+  const [amount, setAmount] = useState<number>(1);
+  const [visibility, setVisibility] = useState(false);
 
   useEffect(() => {
     axiosInstance
@@ -32,9 +36,23 @@ function App() {
       )
       .then((res) => res.data.data)
       .then((currencyToValue: CurrencyToValue) => {
+        const firstCurrency = Object.keys(currencyToValue);
+        const value = Object.values(currencyToValue);
         setCurrencyOptions([...Object.keys(currencyToValue)]);
+        setFromCurrency(firstCurrency[0]);
+        setToCurrency(firstCurrency[0 + 1]);
+        setExchangeRate(value[0]);
       });
   }, []);
+
+  const handleAmountInputChange = (
+    event: React.FormEvent<HTMLInputElement>
+  ) => {
+    const newValue = Number(event.currentTarget.value);
+    setAmount(newValue);
+  };
+
+  const currencyToConvert = amount * exchangeRate;
 
   return (
     <>
@@ -51,9 +69,17 @@ function App() {
           padding: "10px",
         }}
       >
-        <AmountInput />
-        <CurrencyConvertor currencyOptions={currencyOptions} />
-        <CurrencyConvertor currencyOptions={currencyOptions} />
+        <AmountInput amount={amount} onChange={handleAmountInputChange} />
+        <CurrencyConvertor
+          currencyOptions={currencyOptions}
+          selectedCurrency={fromCurrency}
+          onChange={(e) => setFromCurrency(e.target.value)}
+        />
+        <CurrencyConvertor
+          currencyOptions={currencyOptions}
+          selectedCurrency={toCurrency}
+          onChange={(e) => setToCurrency(e.target.value)}
+        />
       </div>
       <div
         style={{
@@ -67,11 +93,11 @@ function App() {
         <Button
           variant="primary"
           size="lg"
-          onClick={() => setConversionValue(234)}
+          onClick={() => setConversionValue(currencyToConvert)}
         >
           CONVERT
         </Button>{" "}
-        <p
+        <div
           style={{
             fontWeight: "bold",
             fontSize: "30px",
@@ -79,8 +105,19 @@ function App() {
             marginLeft: "50px",
           }}
         >
+          {}
           {conversionValue}
-        </p>
+        </div>
+        <div
+          style={{
+            fontWeight: "bold",
+            fontSize: "30px",
+            marginTop: "20px",
+            marginLeft: "50px",
+          }}
+        >
+          {toCurrency}
+        </div>
       </div>
     </>
   );
