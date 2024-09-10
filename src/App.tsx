@@ -21,13 +21,12 @@ export interface Data {
 }
 
 function App() {
-  const [conversionValue, setConversionValue] = useState<number>(0);
+  const [conversionValue, setConversionValue] = useState<number>();
   const [currencyOptions, setCurrencyOptions] = useState<string[]>([]);
   const [fromCurrency, setFromCurrency] = useState<string>("");
   const [toCurrency, setToCurrency] = useState<string>("");
-  const [exchangeRate, setExchangeRate] = useState<number>(0);
-  const [amount, setAmount] = useState<number>(1);
-  const [visibility, setVisibility] = useState(false);
+  const [exchangeRate, setExchangeRate] = useState<number>(parseInt(""));
+  const [amount, setAmount] = useState(parseInt(""));
 
   useEffect(() => {
     axiosInstance
@@ -36,12 +35,12 @@ function App() {
       )
       .then((res) => res.data.data)
       .then((currencyToValue: CurrencyToValue) => {
-        const firstCurrency = Object.keys(currencyToValue);
-        const value = Object.values(currencyToValue);
-        setCurrencyOptions([...Object.keys(currencyToValue)]);
-        setFromCurrency(firstCurrency[0]);
-        setToCurrency(firstCurrency[0 + 1]);
-        setExchangeRate(value[0]);
+        const currencies = Object.keys(currencyToValue);
+        const values = Object.values(currencyToValue);
+        setCurrencyOptions(currencies);
+        setFromCurrency(currencies[0]);
+        setToCurrency(currencies[1]);
+        setExchangeRate(Math.round(values[0]));
       });
   }, []);
 
@@ -53,6 +52,31 @@ function App() {
   };
 
   const currencyToConvert = amount * exchangeRate;
+
+  useEffect(() => {
+    if (toCurrency !== null) {
+      axiosInstance
+        .get<Data>(
+          `/v1/latest?apikey=fca_live_lF4WEifVICj6AZTo8HDgtkHczApDLOZvSv9vxHZ4`
+        )
+        .then((res) => res.data.data)
+        .then((currencyToValue: CurrencyToValue) => {
+          const currencies = Object.keys(currencyToValue);
+          const values = Object.values(currencyToValue);
+          let currenciesToValueMapped = [];
+          for (let i = 0; i < currencies.length; i++) {
+            const currency = currencies[i];
+            const value = Math.round(values[i]);
+            const obj = { currency: currency, value: value };
+            currenciesToValueMapped.push(obj);
+          }
+          const result = currenciesToValueMapped.find(
+            (element) => element.currency === toCurrency
+          );
+          setExchangeRate(Number(result?.value));
+        });
+    }
+  }, [toCurrency]);
 
   return (
     <>
@@ -105,10 +129,9 @@ function App() {
             marginLeft: "50px",
           }}
         >
-          {}
           {conversionValue}
         </div>
-        <div
+        {/* <div
           style={{
             fontWeight: "bold",
             fontSize: "30px",
@@ -117,7 +140,7 @@ function App() {
           }}
         >
           {toCurrency}
-        </div>
+        </div> */}
       </div>
     </>
   );
