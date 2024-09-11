@@ -27,6 +27,7 @@ function App() {
   const [toCurrency, setToCurrency] = useState<string>("");
   const [exchangeRate, setExchangeRate] = useState<number>(parseInt(""));
   const [amount, setAmount] = useState(parseInt(""));
+  // const [currencySymbol, setCurrencySymbol] = useState<string>("");
 
   useEffect(() => {
     axiosInstance
@@ -94,16 +95,40 @@ function App() {
         }}
       >
         <AmountInput amount={amount} onChange={handleAmountInputChange} />
-        <CurrencyConvertor
-          currencyOptions={currencyOptions}
-          selectedCurrency={fromCurrency}
-          onChange={(e) => setFromCurrency(e.target.value)}
-        />
-        <CurrencyConvertor
-          currencyOptions={currencyOptions}
-          selectedCurrency={toCurrency}
-          onChange={(e) => setToCurrency(e.target.value)}
-        />
+        <div style={{ marginBottom: "-10px" }}>
+          <div
+            style={{
+              marginBottom: "-10px",
+              marginLeft: "-370px",
+              fontFamily: "monospace",
+              fontSize: "20px",
+            }}
+          >
+            From{" "}
+          </div>
+          <CurrencyConvertor
+            currencyOptions={currencyOptions}
+            selectedCurrency={fromCurrency}
+            onChange={(e) => setFromCurrency(e.target.value)}
+          />
+        </div>
+        <div style={{ marginBottom: "-10px" }}>
+          <div
+            style={{
+              marginBottom: "-10px",
+              marginLeft: "-395px",
+              fontFamily: "monospace",
+              fontSize: "20px",
+            }}
+          >
+            To{" "}
+          </div>
+          <CurrencyConvertor
+            currencyOptions={currencyOptions}
+            selectedCurrency={toCurrency}
+            onChange={(e) => setToCurrency(e.target.value)}
+          />
+        </div>
       </div>
       <div
         style={{

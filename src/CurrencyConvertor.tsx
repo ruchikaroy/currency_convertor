@@ -13,12 +13,17 @@ const CurrencyConvertor = ({
 }: Props) => {
   return (
     <>
-      <div className="row" style={{ padding: "20px", width: "500px" }}>
+      <div className="row col-md-3" style={{ padding: "20px", width: "500px" }}>
         <select
           value={selectedCurrency}
           onChange={onChange}
           className="form-control"
-          style={{ marginLeft: "10px", border: "solid 1px", padding: "10px" }}
+          style={{
+            marginLeft: "10px",
+            border: "solid 1px",
+            padding: "10px",
+            fontFamily: "monospace",
+          }}
         >
           {currencyOptions.map((currencyOption) => (
             <option key={currencyOption} value={currencyOption}>
